@@ -1,18 +1,18 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
 
-        def check_and_merge(a, b):
-            if a[1] >= b[0]:
-                return [[a[0], b[1]]], True
-            return [a, b], False
-
-        counter = 0
-        while counter+1 < len(intervals):
-            result, merged = check_and_merge(intervals[counter], intervals[counter+1])
-            intervals = intervals[:counter] + result + intervals[counter+2:]
-            if merged:
-                counter = 0
-            counter = counter + 1
+        def merge(a, b):
+            return [min(a[0], b[0]), max(a[1], b[1])]
         
-        return intervals
-            
+        # the line bellow is considered cheating
+        intervals.sort(key=lambda x: x[0]) #sorting by the first value
+        result = [intervals[0]]
+        for i in range(1, len(intervals)):
+            a = result[-1]
+            b = intervals[i]
+            if a[1] >= b[0]:
+                result[-1] = merge(a, b)
+            else:
+                result.append(b)
+                
+        return result
